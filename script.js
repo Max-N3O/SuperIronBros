@@ -1,9 +1,31 @@
+// listObstacles = [
+//   {x: 0, y: 0, length: , width: },
+// ]
+
+
 window.onload = function() {
   document.getElementById("start-button").onclick = function() {
     startGame();
   };
 
+  var init;
+  var animationId = null;
+  var goombaNumber = 0;
+
+
+  var createGoombaVar;
+
   function startGame() {
+    // updateCanvas();
+    console.log(init);
+    if (init) {
+      console.log("Go clearInterval");
+      cancelAnimationFrame(animationId);
+      clearInterval(createGoombaVar);
+    }
+
+
+    init = true;
 
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext('2d');
@@ -45,15 +67,18 @@ window.onload = function() {
     }
 
     function createGoomba() {
+      // console.log("GoCreate");
       var rand = Math.random();
 
-      if (rand > 0.3) {
+      // if (rand > 0.3) {
       var goomba = new Goomba(ctx, canvas.width);
       listGoomba.push(goomba);
-      }
+      goombaNumber += 1;
+      // console.log(goombaNumber);
+      // }
     }
 
-    var createGoomba = setInterval(createGoomba, 4000);
+    createGoombaVar = setInterval(createGoomba, 4000);
 
     Goomba.prototype.draw = function() {
       this.x = this.x - 1;
@@ -99,10 +124,10 @@ window.onload = function() {
 
         case 39:
         // console.log("right") ;
-        if(that.posX <899) {
+        // if(that.posX <899) {
           // ctx.clearRect(0,0,900,500);
           that.posX = that.posX + 10;
-          }
+          // }
         // console.log(posX);
         break;
 
@@ -133,10 +158,10 @@ window.onload = function() {
       // console.log("mario.posY + mario.height: " + parseInt(mario.posY + mario.height));
 
       if ( (e.x <= mario.posX && mario.posX <= e.x + e.width) || ((e.x <= mario.posX + mario.width/2 && mario.posX + mario.width/2 <= e.x + e.width)) || ((e.x <= mario.posX + mario.width && mario.posX + mario.width <= e.x + e.width)) ) {
-        console.log("possible");
-        console.log("position: " + parseInt(mario.posY + mario.height));
+        // console.log("possible");
+        // console.log("position: " + parseInt(mario.posY + mario.height));
         if (parseInt(mario.posY + mario.height) === parseInt(e.y)) {
-          console.log("destruction");
+          // console.log("destruction");
           e.destruction(e);
         }
       }  
@@ -159,6 +184,7 @@ window.onload = function() {
     ctx.font = '20px Arial';
     ctx.fillText("Game Over", 400, 200);
     ctx.fillText("Your score: " + points, 400, 250);
+    clearInterval(createGoombaVar);
   }
 
   Goomba.prototype.destruction = function(element) {
@@ -220,10 +246,11 @@ window.onload = function() {
       
       
 
-      requestAnimationFrame(updateCanvas);
+      animationId = requestAnimationFrame(updateCanvas);
     }
   }
 
+  
   updateCanvas();
 
 
